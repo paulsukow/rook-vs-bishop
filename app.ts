@@ -1,7 +1,7 @@
 /*
 * Assumptions/Notes:
 * When moving, pieces can pass thru others without a collision.
-* According to the directions the rook only moves right, so don't worry about right to left or negative movements
+* According to the directions the rook only moves right or up, so don't worry about left, down, or negative movements
 * Using 0 indexes for x and y direction
 * ChessBoard is static size
 */
@@ -102,38 +102,26 @@ function generateRandomNumberInclusive(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
-const chessBoard: Board = {
-  width: 8,
-  height: 8,
-}
-
-// const rookStartingPosition: Position = {
-//   x: 7,
-//   y: 0,
-// }
-
-
 function playGame() {
+  const chessBoard: Board = {
+    width: 8,
+    height: 8,
+  }
+
   const rookStartingPosition: Position = convertFromFileRank('H1')
   const rook = new Rook(rookStartingPosition, chessBoard)
-  console.log({ rookStartingPosition, expected: '7, 0'})
 
   const bishopStartingPosition: Position = convertFromFileRank('C3')
   const bishop = new Bishop(bishopStartingPosition)
-  console.log({ bishopStartingPosition, expected: '2,2'})
 
   const totalMoves = 15
 
   function performMoves() {
-    function moveRookAndGameStatus() {
+    for (let i = 0; i < totalMoves; i++) {
       const direction = flipCoin()
       const distance = rollDice()
       rook.move(direction, distance)
-      return bishop.canCapturePieceAtPosition(rook.position)
-    }
-
-    for (let i = 0; i < totalMoves; i++) {
-      const status = moveRookAndGameStatus()
+      const status = bishop.canCapturePieceAtPosition(rook.position)
       if (status) {
         return 'Bishop wins'
       }
