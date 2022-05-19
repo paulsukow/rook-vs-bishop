@@ -116,20 +116,18 @@ function playGame() {
 
   const totalMoves = 15
 
-  function performMoves() {
-    for (let i = 0; i < totalMoves; i++) {
-      const direction = flipCoin()
-      const distance = rollDice()
-      rook.move(direction, distance)
-      const status = bishop.canCapturePieceAtPosition(rook.position)
-      if (status) {
-        return 'Bishop wins'
-      }
+  let captured = false
+  for (let i = 0; i < totalMoves; i++) {
+    const direction = flipCoin()
+    const distance = rollDice()
+    rook.move(direction, distance)
+    captured = bishop.canCapturePieceAtPosition(rook.position)
+    if (captured) {
+      break
     }
-    return 'Rook wins'
   }
 
-  const result = performMoves()
+  const result = captured ? 'Bishop wins' : 'Rook wins'
   console.log(result)
 }
 
